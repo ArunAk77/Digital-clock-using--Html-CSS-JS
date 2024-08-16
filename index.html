@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Digital Clock</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Slab:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<style>
+    body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    /* background: linear-gradient(135deg, #8e44ad, #3498db); */
+    background-image: url(https://img1.wallspic.com/crops/6/1/6/4/7/174616/174616-minimalism-operating_system-cloud-gesture-gas-7680x4320.jpg);
+background-repeat: no-repeat;
+background-size: cover;
+
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
+
+.clock-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border-radius: 15px;
+    /* box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.3); */
+    transition: all 0.5s;
+    backdrop-filter: blur(10px);
+    scale: 0.9;
+}
+.clock-container:hover{
+    box-shadow: 0px 0px 30px rgba(0, 0,0,0.30);
+    transition: all 0.5s;
+    scale: 1;
+}
+.clock {
+    font-family: 'Roboto Slab', serif;
+    font-size: 70px;
+    color: #ce3a3a;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hours, #minutes, #seconds {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+#ampm {
+    font-size: 24px;
+    margin-left: 10px;
+    vertical-align: text-top;
+    color: #000000;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #fff;
+    background: linear-gradient(45deg, #ff0a0a, #ffffff);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.btn:active {
+    transform: scale(0.9);
+}
+
+.quote {
+    margin-top: 30px;
+    font-size: 20px;
+    font-style: italic;
+    color: #000000;
+    animation: fadeIn 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+</style>
+<body>
+    <div class="clock-container">
+        <div class="clock" id="clock">
+            <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            <span id="ampm">AM</span>
+        </div>
+        <div class="buttons">
+            <button id="start" class="btn"><i class="fas fa-play"></i> Start</button>
+            <button id="stop" class="btn"><i class="fas fa-pause"></i> Stop</button>
+            <button id="reset" class="btn"><i class="fas fa-redo"></i> Reset</button>
+        </div>
+        <div class="quote">
+            <p>"Time is what we want most, but what we use worst." - William Penn</p>
+        </div>
+    </div>
+    <script>
+        const hoursElement = document.getElementById('hours');
+const minutesElement = document.getElementById('minutes');
+const secondsElement = document.getElementById('seconds');
+const ampmElement = document.getElementById('ampm');
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+const resetButton = document.getElementById('reset');
+
+let clockInterval;
+let isRunning = false;
+
+function updateClock() {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 should be '12'
+    hours = String(hours).padStart(2, '0');
+
+    hoursElement.textContent = hours;
+    minutesElement.textContent = minutes;
+    secondsElement.textContent = seconds;
+    ampmElement.textContent = ampm;
+
+    animateClock(hoursElement);
+    animateClock(minutesElement);
+    animateClock(secondsElement);
+}
+
+function animateClock(element) {
+    element.style.transform = 'scale(1.2)';
+    setTimeout(() => {
+        element.style.transform = 'scale(1)';
+    }, 150);
+}
+
+startButton.addEventListener('click', () => {
+    if (!isRunning) {
+        clockInterval = setInterval(updateClock, 1000);
+        isRunning = true;
+    }
+});
+
+stopButton.addEventListener('click', () => {
+    clearInterval(clockInterval);
+    isRunning = false;
+});
+
+resetButton.addEventListener('click', () => {
+    clearInterval(clockInterval);
+    isRunning = false;
+    hoursElement.textContent = '00';
+    minutesElement.textContent = '00';
+    secondsElement.textContent = '00';
+    ampmElement.textContent = 'AM';
+});
+
+window.onload = updateClock;
+
+    </script>
+</body>
+</html>
